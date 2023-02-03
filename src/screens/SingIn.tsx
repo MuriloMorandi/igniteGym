@@ -2,10 +2,12 @@ import { Center, Heading, Image, Text, VStack } from 'native-base'
 
 import LogoSvg from '@assets/logo.svg'
 import BackgroundImg from '@assets/background.png'
+import { Input } from '@components/Input'
+import { Button } from '@components/Button'
 
 export function SingIn() {
     return(
-        <VStack flex={1} bg={"gray.700"}>
+        <VStack flex={1} bg={"gray.700"} px={10}>
             <Image
                 source={BackgroundImg}
                 alt={"Pessoas treinando"}
@@ -30,7 +32,22 @@ export function SingIn() {
                     >
                     Acesse sua conta
                 </Heading>
+
+                <Input
+                    placeholder='Email'
+                    keyboardType='email-address'
+                    autoCapitalize='none'
+                />
+
+                <Input
+                    placeholder='Senha'
+                    secureTextEntry
+                />
+
+                <Button title='Acessar'/>
             </Center>
+
+            <Button title='Acessar' variant={"outline"}/>
         </VStack>
     )
 }
