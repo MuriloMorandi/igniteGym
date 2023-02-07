@@ -1,18 +1,17 @@
 import { Center, Heading, Image, ScrollView, Text, VStack } from 'native-base'
-import { useNavigation } from '@react-navigation/native'
 
 import LogoSvg from '@assets/logo.svg'
 import BackgroundImg from '@assets/background.png'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { useNavigation } from '@react-navigation/native'
 
-export function SingIn() {
-    const navigation = useNavigation<AuthNavigatorRoutesProps>();
+export function SingUp() {
+    const navigation = useNavigation();
 
-    function handleNewAccount() {
-        navigation.navigate("singUp")
-    }
+   function handleGoBack() {
+       navigation.goBack()
+   }
 
     return (
         <ScrollView 
@@ -43,8 +42,12 @@ export function SingIn() {
                         mb={6}
                         fontFamily={"heading"}
                         >
-                        Acesse sua conta
+                        Crie sua Conta
                     </Heading>
+
+                    <Input
+                        placeholder='Nome'
+                    />
 
                     <Input
                         placeholder='Email'
@@ -57,26 +60,16 @@ export function SingIn() {
                         secureTextEntry
                     />
 
-                    <Button title='Acessar'/>
+                    <Button title='Criar e acessar'/>
                 </Center>
 
-                <Center mt={24}>
-
-                    <Text
-                        color={"gray.100"}
-                        fontSize={"md"}
-                        mb={3}
-                        fontFamily={"body"}
-                    >
-                        Ainda Não tem acesso?
-                    </Text>
-
-                    <Button
-                        title='Acessar'
-                        variant={"outline"}
-                        onPress={handleNewAccount}
-                    />
-                </Center>
+                <Button
+                    title='Voltar para o login'
+                    variant={"outline"}
+                    mt={24}
+                    onPress={handleGoBack}
+                />
+                
             </VStack>
         </ScrollView>
     )
