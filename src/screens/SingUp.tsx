@@ -1,11 +1,14 @@
 import { Center, Heading, Image, ScrollView, Text, VStack } from 'native-base'
 import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigation } from '@react-navigation/native'
 
 import LogoSvg from '@assets/logo.svg'
 import BackgroundImg from '@assets/background.png'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
+import { signUpSchema } from '@schemas/signUpSchema'
+
 
 type FormDataProps = {
   name: string;
@@ -15,7 +18,13 @@ type FormDataProps = {
 }
 
 export function SingUp() {
-    const { control, handleSubmit } = useForm<FormDataProps>();
+    const {
+        control,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<FormDataProps>({
+        resolver: yupResolver(signUpSchema)
+    });
     const navigation = useNavigation();
     
     function handleGoBack() {
@@ -66,6 +75,7 @@ export function SingUp() {
                                 placeholder='Nome'
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.name?.message}
                             />
                         )}
                     />
@@ -80,6 +90,7 @@ export function SingUp() {
                                 autoCapitalize="none"
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.email?.message}
                             />
                         )}
                     />
@@ -93,6 +104,7 @@ export function SingUp() {
                                 secureTextEntry
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.password?.message}
                             />
                         )}
                     />
@@ -108,6 +120,7 @@ export function SingUp() {
                                 value={value}
                                 onSubmitEditing={handleSubmit(handleSignUp)}
                                 returnKeyType="send"
+                                errorMessage={errors.rePassword?.message}
                             />
                         )}
                     />
@@ -123,7 +136,7 @@ export function SingUp() {
                 <Button
                     title='Voltar para o login'
                     variant={"outline"}
-                    mt={24}
+                    mt={12}
                     onPress={handleGoBack}
                 />
                 

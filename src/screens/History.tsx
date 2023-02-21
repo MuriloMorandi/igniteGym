@@ -29,6 +29,7 @@ export function History() {
                     <Heading
                         color={"gray.200"}
                         fontSize={"md"}
+                        fontFamily={"heading"}
                         mt={10}
                         mb={3}
                     >
