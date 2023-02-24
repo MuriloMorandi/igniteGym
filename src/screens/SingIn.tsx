@@ -1,4 +1,13 @@
-import { Center, Heading, Image, ScrollView, Text, VStack } from 'native-base'
+import { useState } from 'react'
+import {
+    Center,
+    Heading,
+    Image,
+    ScrollView,
+    Text,
+    useToast,
+    VStack,
+} from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -7,6 +16,8 @@ import BackgroundImg from '@assets/background.png'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { useAuth } from '@hooks/useAuth'
+import { AppError } from '@utils/appError'
 
 type FormData = {
   email: string;
@@ -14,8 +25,12 @@ type FormData = {
 }
 
 export function SingIn() {
+    const [isLoading, setIsLoading]  = useState(false);
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
-    
+    const { singIn } = useAuth()
+
+    const toast = useToast();
+
     const {
         control,
         handleSubmit,
@@ -26,8 +41,25 @@ export function SingIn() {
         navigation.navigate("singUp")
     }
 
-    function handleSignIn({ email, password }: FormData){
-        console.log(email, password)
+    async function handleSignIn({ email, password }: FormData){
+        try{
+            setIsLoading(true)
+            await singIn({ email, password })
+        }
+        catch (error){
+            setIsLoading(false)
+            const isAppError = error instanceof AppError;
+
+            const title = isAppError ?
+                error.message :
+                "Não foi possível entrar. Tente novamente mais tarde."
+            
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
     }
 
     return (
@@ -94,6 +126,7 @@ export function SingIn() {
                     <Button
                         title='Acessar'
                         onPress={handleSubmit(handleSignIn)}
+                        isLoading={isLoading}
                     />
 
                 </Center>

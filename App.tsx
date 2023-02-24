@@ -5,6 +5,7 @@ import { NativeBaseProvider } from 'native-base';
 import { THEME } from './src/theme';
 import { Loading } from '@components/Loading';
 import { Routes } from '@routes/index';
+import { AppContextProvider } from '@contexts/index';
 
 export default function App() {
   const [fontsLoaded] = useFonts({Roboto_400Regular, Roboto_700Bold})
@@ -18,7 +19,9 @@ export default function App() {
         translucent
         />
 
-      {fontsLoaded? <Routes/> : <Loading/>}
+      <AppContextProvider>
+        {fontsLoaded ? <Routes /> : <Loading />}
+      </AppContextProvider>
       
       
     </NativeBaseProvider>

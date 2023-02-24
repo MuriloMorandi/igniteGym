@@ -6,17 +6,17 @@ import {
     Text,
     VStack,
     useToast
-} from 'native-base'
+} from 'native-base';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 
-import BackgroundImg from '@assets/background.png'
-import LogoSvg from '@assets/logo.svg'
-import { Button } from '@components/Button'
-import { Input } from '@components/Input'
-import { signUpSchema } from '@schemas/signUpSchema'
-import { api } from '@services/api'
+import BackgroundImg from '@assets/background.png';
+import LogoSvg from '@assets/logo.svg';
+import { Button } from '@components/Button';
+import { Input } from '@components/Input';
+import { signUpSchema } from '@schemas/signUpSchema';
+import { api } from '@services/api';
 import { AppError } from '@utils/appError';
 
 type FormDataProps = {
