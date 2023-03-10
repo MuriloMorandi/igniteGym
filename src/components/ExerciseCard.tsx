@@ -2,11 +2,14 @@ import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { HStack, Heading, Icon, Image, Text, VStack } from "native-base";
 import { Entypo } from '@expo/vector-icons'
 
-interface ExerciseCardProps extends TouchableOpacityProps{
+import { api } from "@services/api";
+import { ExerciseDTO } from "@dtos/ExerciseDTO";
 
+interface ExerciseCardProps extends TouchableOpacityProps{
+    data: ExerciseDTO;
 }
 
-export function ExerciseCard({ ...rest }: ExerciseCardProps) {
+export function ExerciseCard({data,  ...rest }: ExerciseCardProps) {
     return (
         <TouchableOpacity {...rest}>
             <HStack
@@ -18,7 +21,9 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
                 mb={3}
             >
                 <Image
-                    source={{ uri: 'https://blog.lionfitness.com.br/wp-content/uploads/2018/10/remada-baixa.jpg'}}
+                    source={{
+                        uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}`
+                    }}
                     alt={"Imagem do Exercício"}
                     w={16}
                     h={16}
@@ -33,7 +38,7 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
                         color={"white"}
                         fontFamily={"heading"}
                     >
-                        Remada Unilateral
+                        {data.name}
                     </Heading>
                     <Text
                         fontSize={"sm"}
@@ -41,7 +46,7 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
                         mt={1}
                         numberOfLines={2}
                     >
-                        3 séries x 12 repetições
+                        {data.series} séries x {data.repetitions} repetições
                     </Text>
                 </VStack>
                     
