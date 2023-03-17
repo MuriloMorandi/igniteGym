@@ -42,13 +42,10 @@ export function SignUp() {
     }
 
     function handleSignUp({ name, email, password }: FormDataProps) {
-        console.log(name, email, password);
         
         api.post('/users', { name, email, password })
-            .then(() => {
-                console.log("sucesso");
-                
-             })
+            .then(() => {      
+            })
             .catch((error) => {
                 const isAppError = error instanceof AppError;
 
