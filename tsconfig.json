@@ -35,7 +35,8 @@
         "./src/routes/*"
       ],
       "@schemas/*":[
-        "./scr/schemas/*"
+        "./scr/schemas/*",
+        "./src/routes/*"
       ]
     }
   }

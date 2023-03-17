@@ -8,7 +8,7 @@ import { useAuth } from "@hooks/useAuth";
 
 export function HomeHeader() {
 
-    const { user, singOut } = useAuth()
+    const { user, signOut } = useAuth()
 
     const sourceAvatar = user.avatar ?
         { uri: user.avatar }
@@ -37,7 +37,7 @@ export function HomeHeader() {
                 </Heading>
             </VStack>
             
-            <TouchableOpacity onPress={singOut}>
+            <TouchableOpacity onPress={signOut}>
                 <Icon
                     as={MaterialIcons}
                     name="logout"

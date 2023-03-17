@@ -24,10 +24,10 @@ type FormData = {
   password: string;
 }
 
-export function SingIn() {
+export function SignIn() {
     const [isLoading, setIsLoading]  = useState(false);
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
-    const { singIn } = useAuth()
+    const { signIn } = useAuth()
 
     const toast = useToast();
 
@@ -38,13 +38,13 @@ export function SingIn() {
     } = useForm<FormData>()
 
     function handleNewAccount() {
-        navigation.navigate("singUp")
+        navigation.navigate("signUp")
     }
 
     async function handleSignIn({ email, password }: FormData){
         try{
             setIsLoading(true)
-            await singIn({ email, password })
+            await signIn({ email, password })
         }
         catch (error){
             setIsLoading(false)

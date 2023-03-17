@@ -26,7 +26,7 @@ type FormDataProps = {
   rePassword: string;
 }
 
-export function SingUp() {
+export function SignUp() {
     const toast = useToast();
     const {
         control,
