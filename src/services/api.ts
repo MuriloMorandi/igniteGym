@@ -3,7 +3,7 @@ import axios from 'axios'
 import { AppError } from '@utils/appError'
 
 export const api = axios.create({
-    baseURL: 'http://192.168.0.41:3333',
+  baseURL: 'http://192.168.15.19:3333',
 })
 
 
