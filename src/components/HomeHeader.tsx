@@ -5,13 +5,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 import defaultUserPhotoImg from "@assets/userPhotoDefault.png";
 import { UserPhoto } from "@components/UserPhoto";
 import { useAuth } from "@hooks/useAuth";
+import { api } from "@services/api";
 
 export function HomeHeader() {
 
     const { user, signOut } = useAuth()
 
     const sourceAvatar = user.avatar ?
-        { uri: user.avatar }
+        { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
         :
         defaultUserPhotoImg;
         

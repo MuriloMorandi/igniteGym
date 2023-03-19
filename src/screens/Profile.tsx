@@ -24,6 +24,8 @@ import { profileSchema } from "@schemas/profileSchema";
 import { api } from "@services/api";
 import { AppError } from "@utils/appError";
 
+import defaultUserPhotoImg from "@assets/userPhotoDefault.png";
+
 type FormDataProps = {
   name: string;
   email: string;
@@ -35,9 +37,13 @@ type FormDataProps = {
 export function Profile() {
     const [isUpdating, setIsUpdating] = useState(false);
     const [photoIsLoading, setPhotoIsLoading] = useState(false);
-    const [userPhoto, setUserPhoto] = useState('https://github.com/murilomorandi.png')
-
     const { user, updateUserProfile } = useAuth();
+
+    const sourceAvatar = user.avatar ?
+        { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+        :
+        defaultUserPhotoImg;
+    
     const {
         control,
         handleSubmit,
@@ -68,7 +74,8 @@ export function Profile() {
 
         
             if (!photoSelected.canceled){
-                const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
+                const photoAssets = photoSelected.assets[0];
+                const photoInfo = await FileSystem.getInfoAsync(photoAssets.uri);
                 
                 if (photoInfo.size &&
                     (photoInfo.size / 1024 / 1024) > 5)
@@ -80,7 +87,31 @@ export function Profile() {
                     })
                 }
 
-                setUserPhoto(photoSelected.assets[0].uri);
+                const fileExtension = photoAssets.uri.split('.').pop();
+
+                const photoFile = {
+                    name: `${user.name}.${fileExtension}`.toLowerCase(),
+                    uri: photoAssets.uri,
+                    type: `${photoAssets.type}/${fileExtension}`
+                } as any
+
+                const userPhotoUploadForm = new FormData();
+
+                userPhotoUploadForm.append('avatar', photoFile);
+
+                const avatarUpdtedResponse = await api.patchForm('/users/avatar', userPhotoUploadForm);
+
+                const userUpdated = user;
+                userUpdated.avatar = avatarUpdtedResponse.data.avatar;
+                
+                await updateUserProfile(userUpdated);
+
+                toast.show({
+                    title: 'Foto atualizada!',
+                    placement: 'top',
+                    bgColor: 'green.500'
+                })
+
             }
             
         }catch(error){
@@ -140,7 +171,7 @@ export function Profile() {
                         />
                         :
                         <UserPhoto
-                            source={{ uri:userPhoto }}
+                            source={sourceAvatar}
                             alt={"Foto do usuário"}
                             size={photoSize}
                         />
