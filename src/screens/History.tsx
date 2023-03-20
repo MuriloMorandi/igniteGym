@@ -4,6 +4,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { HistoryCard } from "@components/HistoryCard"
 import { ScreenHeader } from "@components/ScreenHeader"
+import { Loading } from '@components/Loading';
 import { HistoryByDayDTO } from "@dtos/HistoryByDayDTO";
 import { api } from "@services/api";
 import { AppError } from "@utils/appError";
@@ -43,38 +44,41 @@ export function History() {
     return (
         <VStack flex={1}>
             <ScreenHeader title="Histórico de exercícios" />
-            
-             <SectionList
-                sections={exercises}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    <HistoryCard data={item}/>
-                )}
-                renderSectionHeader={({ section }) => (
-                    <Heading
-                        color={"gray.200"}
-                        fontSize={"md"}
-                        fontFamily={"heading"}
-                        mt={10}
-                        mb={3}
-                    >
-                        {section.title}
-                    </Heading>
-                )}
-                ListEmptyComponent={() => (
-                    <Text color={"gray.100"} textAlign={"center"}>
-                        Não há exercícios registrados ainda.{'\n'}
-                        Vamos malhar hoje?
-                    </Text>  
-                )}
-                contentContainerStyle={
-                    !exercises.length && {
-                        flex: 1,
-                        justifyContent:"center"
-                    }
-                }
-                px={8}
-            />
+              {isLoading ?
+                <Loading />
+                  :
+                <SectionList
+                  sections={exercises}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item }) => (
+                      <HistoryCard data={item}/>
+                  )}
+                  renderSectionHeader={({ section }) => (
+                      <Heading
+                          color={"gray.200"}
+                          fontSize={"md"}
+                          fontFamily={"heading"}
+                          mt={10}
+                          mb={3}
+                      >
+                          {section.title}
+                      </Heading>
+                  )}
+                  ListEmptyComponent={() => (
+                      <Text color={"gray.100"} textAlign={"center"}>
+                          Não há exercícios registrados ainda.{'\n'}
+                          Vamos malhar hoje?
+                      </Text>  
+                  )}
+                  contentContainerStyle={
+                      !exercises.length && {
+                          flex: 1,
+                          justifyContent:"center"
+                      }
+                  }
+                  px={8}
+                />
+              }
         </VStack>   
     )
     
