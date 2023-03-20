@@ -14,6 +14,7 @@ import {
   storageUserSave
 } from "@storage/storageUser";
 import {
+  storageAuthTokenGet,
   storageAuthTokenRemove,
   storageAuthTokenSave
 } from "@storage/storageAuthToken";
@@ -42,11 +43,14 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUser(userData);
   }
   
-  async function storageUserAndTokenSave(userData: UserDTO, token: string) {
+  async function storageUserAndTokenSave(
+      userData: UserDTO,
+      token: string,
+      refresh_token: string) {
     try {
       setIsLoadingUserStorageData(true)
       await storageUserSave(userData);
-      await storageAuthTokenSave(token);
+      await storageAuthTokenSave({ token, refresh_token });
       
     } catch (error) {
       throw error
@@ -58,8 +62,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signIn({ email, password }: UsersignInDTO) {
     await api.post('/sessions', { email, password })
       .then(async ({ data }) => {
-        await storageUserAndTokenSave(data.user, data.token);
-        userAndTokenUpdate(data.user, data.token)
+        await storageUserAndTokenSave(
+          data.user,
+          data.token,
+          data.refresh_token
+        );
+        userAndTokenUpdate(data.user, data.token);
+
       })
       .catch((error) => {
         throw error;
@@ -93,8 +102,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function loadUserData() {
     try {
       const userLogged = await storageUserGet();
+      const { token } = await storageAuthTokenGet();
 
-      if(userLogged) {
+      if(token && userLogged) {
         setUser(userLogged);
       } 
     } catch (error) {
@@ -105,7 +115,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }
 
   useEffect(() => {
-    loadUserData()
+    loadUserData();
+  }, [])
+  
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      subscribe();
+    }
   },[])
 
   return (
